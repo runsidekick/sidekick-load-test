@@ -71,7 +71,7 @@ export class DeploymentStack extends cdk.Stack {
             publicLoadBalancer: true,
             assignPublicIp: true,
             taskImageOptions: {
-                image: ecs.ContainerImage.fromAsset('../../', {file: 'petclinic-app/Dockerfile'}),
+                image: ecs.ContainerImage.fromAsset('../../', {file: 'petclinic-app/dockerfiles/default.Dockerfile'}),
                 containerPort: 8080,
                 enableLogging: true,
                 environment: {

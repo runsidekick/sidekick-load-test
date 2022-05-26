@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0.24
+    container_name: mysql-petclinic
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_USER=petclinic-agentless
+      - MYSQL_PASSWORD=petclinic-agentless
+      - MYSQL_DATABASE=petclinic-agentless
+    cap_add:
+      - SYS_NICE
+  petclinic-app:
+    build:
+      context: ../..
+      dockerfile: ./petclinic-app/dockerfiles/agentless.Dockerfile
+    container_name: petclinic-agentless-app
+    deploy:
+      resources:
+        limits:
+          cpus: 4
+          memory: 1024M
+    depends_on:
+      - "mysql"
+    environment:
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      MYSQL_URL: jdbc:mysql://mysql:3306/petclinic-agentless
+      MYSQL_USER: petclinic-agentless
+      MYSQL_PASS: petclinic-agentless
+    ports:
+      - 8080:8080
+    restart: always
+    volumes:
+      - ./logs/agentless:/app/log
