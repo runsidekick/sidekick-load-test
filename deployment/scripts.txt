@@ -1,0 +1,136 @@
+KEYPAIR:
+aws ec2 create-key-pair --key-name PetclinicKeyPair --query 'KeyMaterial' > MyKeyPair.pem
+
+aws ec2 describe-key-pairs --key-name PetclinicKeyPair
+
+aws ec2 delete-key-pair --key-name PetclinicKeyPair
+
+Security group:
+
+aws ec2 create-security-group --group-name petclinic-sg --description "Petclinic security group"
+
+*** Set Inbound rules for ssh, 8080 and 3306 ports!!!
+
+EC2:
+aws ec2 run-instances \
+    --image-id ami-0ca285d4c2cda3300 \
+    --instance-type t2.micro \
+    --key-name PetclinicKeyPair \
+    --placement AvailabilityZone=us-west-2a \
+    --security-groups petclinic-sg \
+    --count 3
+
+MYSQL:
+aws rds create-db-instance \
+    --db-name PetClinicAppRds \
+    --db-instance-identifier petclinic-mysql-instance \
+    --db-instance-class db.t2.micro \
+    --engine mysql \
+    --engine-version 8.0.21 \
+    --no-multi-az \
+    --port 3306 \
+    --master-username petclinic \
+    --master-user-password petclinic \
+    --backup-retention-period 0 \
+    --no-deletion-protection \
+    --availability-zone us-west-2a \
+    --vpc-security-group-ids sg-07a3ac70eb8dfde06 \
+    --allocated-storage 20 
+
+ec2 instances:
+jmeter => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-54-191-234-181.us-west-2.compute.amazonaws.com
+petclinic-agentless => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-34-219-59-87.us-west-2.compute.amazonaws.com
+
+java install:
+
+sudo yum install java-1.8.0
+
+DB:
+export MYSQL_DATABASE=PetClinicAppRds
+export MYSQL_USER=petclinic
+export MYSQL_PASSWORD=petclinic
+export MYSQL_URL=jdbc:mysql://petclinic-mysql-instance.cmzl2ojch8c1.us-west-2.rds.amazonaws.com/PetClinicAppRds
+
+
+SCP jar:
+scp -i ~/.aws/PetclinicKeyPair.pem /Users/gokhansimsek/Desktop/sidekick-load-testing/thundra-sidekick-petclinic-demo/petclinic-app/target/petclinic-app-1.0.0.jar ec2-user@ec2-34-219-59-87.us-west-2.compute.amazonaws.com:/home/ec2-user
+
+scp -i ~/.aws/PetclinicKeyPair.pem /Users/gokhansimsek/Desktop/sidekick-load-testing/thundra-sidekick-petclinic-demo/petclinic-app/src/test/jmeter/petclinic_test_plan.jmx ec2-user@ec2-54-191-234-181.us-west-2.compute.amazonaws.com:/home/ec2-user
+
+
+Get Remote file:
+
+scp -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-35-87-151-55.us-west-2.compute.amazonaws.com:/home/ec2-user/visualize_agentless_remote.zip ~/Desktop
+
+
+jmeter install:
+sudo yum install java-1.8.0
+wget -c http://ftp.ps.pl/pub/apache//jmeter/binaries/apache-jmeter-5.4.3.tgz
+wget -c https://jmeter-plugins.org/files/packages/jpgc-casutg-2.10.zip
+tar -xf apache-jmeter-5.4.3.tgz
+sudo yum install unzip
+unzip jpgc-casutg-2.10.zip
+cp lib/jmeter-plugins-cmn-jmeter-0.6.jar apache-jmeter-5.4.3/lib/
+cp lib/ext/jmeter-plugins-casutg-2.10.jar apache-jmeter-5.4.3/lib/ext/
+cp lib/ext/jmeter-plugins-manager-1.6.jar apache-jmeter-5.4.3/lib/ext/ 
+./apache-jmeter-5.4.3/bin/jmeter.sh
+
+
+!!! copy the folder https://www.perfmatrix.com/jmeter-concurrency-thread-group/ !!!
+
+jmeter run:
+./apache-jmeter-5.4.3/bin/jmeter.sh -n -t petclinic_test_plan.jmx -l ./visualize_agentless_remote/testresult.jlt -e -o ./visualize_agentless_remote
+
+
+
+Run Petclinic:
+    Agentless:
+        export MYSQL_DATABASE=PetClinicAppRds
+        export MYSQL_USER=petclinic
+        export MYSQL_PASSWORD=petclinic
+        export MYSQL_URL=jdbc:mysql://petclinic-mysql-instance.cmzl2ojch8c1.us-west-2.rds.amazonaws.com/PetClinicAppRds
+        scp -i ~/.aws/PetclinicKeyPair.pem /Users/gokhansimsek/Desktop/sidekick-load-testing/thundra-sidekick-petclinic-demo/petclinic-app/target/petclinic-app-1.0.0.jar ec2-user@ec2-34-219-59-87.us-west-2.compute.amazonaws.com:/home/ec2-user
+        java -Dspring.profiles.active=agentless -verbose:gc -Xloggc:./gc.log -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -jar petclinic-app-1.0.0.jar
+
+    Sidekick:
+        export MYSQL_DATABASE=PetClinicAppRds
+        export MYSQL_USER=petclinic
+        export MYSQL_PASSWORD=petclinic
+        export MYSQL_URL=jdbc:mysql://petclinic-mysql-instance.cmzl2ojch8c1.us-west-2.rds.amazonaws.com/PetClinicAppRds
+        export sidekick_apiKey: 3637c782-38c3-49a0-9722-def85f76d847
+        export sidekick_agent_application_name: petclinic-sidekick-app
+        export sidekick_agent_application_version: 0.1.1
+        export sidekick_agent_application_stage: local
+        scp -i ~/.aws/PetclinicKeyPair.pem /Users/gokhansimsek/Desktop/sidekick-load-testing/thundra-sidekick-petclinic-demo/petclinic-app/target/petclinic-app-1.0.0.jar ec2-user@ec2-34-219-59-87.us-west-2.compute.amazonaws.com:/home/ec2-user
+        scp -i ~/.aws/PetclinicKeyPair.pem /Users/gokhansimsek/Desktop/sidekick-load-testing/thundra-sidekick-petclinic-demo/sidekick-agent-bootstrap.jar ec2-user@ec2-user@ec2-34-219-59-87.us-west-2.compute.amazonaws.com:/home/ec2-user
+        java -Dspring.profiles.active=sidekick -javaagent:sidekick-agent-bootstrap.jar -verbose:gc -Xloggc:./gc.log -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -jar petclinic-app-1.0.0.jar
+
+    Rookout:
+        export MYSQL_DATABASE=PetClinicAppRds
+        export MYSQL_USER=petclinic
+        export MYSQL_PASSWORD=petclinic
+        export MYSQL_URL=jdbc:mysql://petclinic-mysql-instance.cmzl2ojch8c1.us-west-2.rds.amazonaws.com/PetClinicAppRds
+        curl -L "https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.rookout&a=rook&v=LATEST" -o rook.jar
+        export JAVA_TOOL_OPTIONS="-javaagent:./rook.jar -DROOKOUT_TOKEN=48030070e9910fc49821ce11d8f2bdc54e4ef1688618666d514eb3920a2de07a -DROOKOUT_LABELS=env:dev"
+        java -Dspring.profiles.active=rookout -verbose:gc -Xloggc:./gc.log -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -jar petclinic-app-1.0.0.jar
+
+    Lightrun:
+        export MYSQL_DATABASE=PetClinicAppRds
+        export MYSQL_USER=petclinic
+        export MYSQL_PASSWORD=petclinic
+        export MYSQL_URL=jdbc:mysql://petclinic-mysql-instance.cmzl2ojch8c1.us-west-2.rds.amazonaws.com/PetClinicAppRds
+        export LIGHTRUN_KEY=6f8e9878-fe56-4f19-acd1-44e9d5b298d9
+        bash -c "$(curl -L "https://app.lightrun.com/download/company/d067f4eb-3bb0-4fe4-9bd7-900bc0e996ef/install-agent.sh?platform=openjdk:8")"
+        java -agentpath:./agent/lightrun_agent.so -Dspring.profiles.active=lightrun -verbose:gc -Xloggc:./gc.log -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -jar petclinic-app-1.0.0.jar
+
+
+
+jmeter => ec2-54-191-234-181.us-west-2.compute.amazonaws.com
+agentless => ec2-34-219-59-87.us-west-2.compute.amazonaws.com
+sidekick => ec2-18-236-89-219.us-west-2.compute.amazonaws.com
+lightrun => ec2-54-190-57-200.us-west-2.compute.amazonaws.com
+rookout => ec2-52-42-255-169.us-west-2.compute.amazonaws.com
+
+HOST_URL=ec2-18-236-89-219.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_sidekick JMETER_URL=ec2-54-191-234-181.us-west-2.compute.amazonaws.com ./jmeter.sh
+
+AGENT=sidekick SEND_JAR=? ./agent-run.sh
