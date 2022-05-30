@@ -33,7 +33,7 @@ ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@$lightrun 'bash -s' <<'ENDSSH'
     export MYSQL_PASSWORD=petclinic
     export MYSQL_URL=jdbc:mysql://petclinic-mysql-instance.cmzl2ojch8c1.us-west-2.rds.amazonaws.com/PetClinicAppRds
     export LIGHTRUN_KEY=6f8e9878-fe56-4f19-acd1-44e9d5b298d9
-    wget -c https://app.lightrun.com/download/company/d067f4eb-3bb0-4fe4-9bd7-900bc0e996ef/install-agent.sh?platform=openjdk:8
+    bash -c "$(curl -L "https://app.lightrun.com/download/company/d067f4eb-3bb0-4fe4-9bd7-900bc0e996ef/install-agent.sh?platform=openjdk:8")"
     nohup java -agentpath:./agent/lightrun_agent.so -Dspring.profiles.active=lightrun -verbose:gc -Xloggc:./gc.log -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -jar petclinic-app-1.0.0.jar >/dev/null 2>&1
     exit;
 ENDSSH
@@ -48,7 +48,7 @@ ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@$rookout 'bash -s' <<'ENDSSH'
     export MYSQL_USER=petclinic
     export MYSQL_PASSWORD=petclinic
     export MYSQL_URL=jdbc:mysql://petclinic-mysql-instance.cmzl2ojch8c1.us-west-2.rds.amazonaws.com/PetClinicAppRds
-    wget -E -c "https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.rookout&a=rook&v=LATEST" -o rook.jar
+    bash -c "$(curl -L "https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.rookout&a=rook&v=LATEST" -o rook.jar)"
     export JAVA_TOOL_OPTIONS="-javaagent:./rook.jar -DROOKOUT_TOKEN=48030070e9910fc49821ce11d8f2bdc54e4ef1688618666d514eb3920a2de07a -DROOKOUT_LABELS=env:dev"
     nohup java -Dspring.profiles.active=rookout -verbose:gc -Xloggc:./gc.log -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -jar petclinic-app-1.0.0.jar >/dev/null 2>&1
     exit;

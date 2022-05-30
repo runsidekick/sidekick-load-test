@@ -18,13 +18,13 @@ ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@$jmeter_url "bash -s" << ENDSSH
     cp ./lib/jmeter-plugins-cmn-jmeter-0.6.jar ./apache-jmeter-5.4.3/lib/
     cp ./lib/ext/jmeter-plugins-casutg-2.10.jar ./apache-jmeter-5.4.3/lib/ext/
     cp ./lib/ext/jmeter-plugins-manager-1.6.jar ./apache-jmeter-5.4.3/lib/ext/
-    ./apache-jmeter-5.4.3/bin/jmeter.sh -n -t petclinic_test_plan.jmx -JPETCLINIC_HOST=$host_url -JCONTEXT_WEB=$host_url -l $path_jlt -e -o $path_visualize
+    ./apache-jmeter-5.4.3/bin/jmeter.sh -n -t petclinic_test_plan.jmx -Jhost=$host_url -Jport=8080 -l $path_jlt -e -o $path_visualize
     zip -r $result_path.zip $path_visualize
     exit;
 ENDSSH
 else
 ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@$jmeter_url "bash -s" << ENDSSH
-    ./apache-jmeter-5.4.3/bin/jmeter.sh -n -t petclinic_test_plan.jmx -JPETCLINIC_HOST=$host_url -l $path_jlt -e -o $path_visualize
+    ./apache-jmeter-5.4.3/bin/jmeter.sh -n -t petclinic_test_plan.jmx -Jhost=$host_url -Jport=8080 -l $path_jlt -e -o $path_visualize
     zip -r $result_path.zip $path_visualize
     exit;
 ENDSSH

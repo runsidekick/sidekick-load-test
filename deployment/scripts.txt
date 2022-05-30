@@ -131,6 +131,12 @@ sidekick => ec2-18-236-89-219.us-west-2.compute.amazonaws.com
 lightrun => ec2-54-190-57-200.us-west-2.compute.amazonaws.com
 rookout => ec2-52-42-255-169.us-west-2.compute.amazonaws.com
 
-HOST_URL=ec2-18-236-89-219.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_sidekick JMETER_URL=ec2-54-191-234-181.us-west-2.compute.amazonaws.com ./jmeter.sh
+HOST_URL=ec2-18-236-89-219.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_sidekick JMETER_URL=ec2-54-191-234-181.us-west-2.compute.amazonaws.com INSTALL=1 ./jmeter.sh
+HOST_URL=ec2-34-219-59-87.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_agentless JMETER_URL=ec2-54-191-234-181.us-west-2.compute.amazonaws.com ./jmeter.sh
+HOST_URL=ec2-54-190-57-200.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_lightrun JMETER_URL=ec2-54-191-234-181.us-west-2.compute.amazonaws.com ./jmeter.sh
+HOST_URL=ec2-52-42-255-169.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_rookout JMETER_URL=ec2-54-191-234-181.us-west-2.compute.amazonaws.com ./jmeter.sh
 
-AGENT=sidekick SEND_JAR=? ./agent-run.sh
+AGENT=agentless SEND_JAR=1 ./agent-run.sh
+AGENT=sidekick ./agent-run.sh
+AGENT=lightrun ./agent-run.sh
+AGENT=rookout ./agent-run.sh
