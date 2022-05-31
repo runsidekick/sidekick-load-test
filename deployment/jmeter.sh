@@ -1,5 +1,4 @@
  #!/bin/bash
-scp -i ~/.aws/PetclinicKeyPair.pem /Users/gokhansimsek/Desktop/sidekick-load-testing/thundra-sidekick-petclinic-demo/petclinic-app/src/test/jmeter/petclinic_test_plan.jmx ec2-user@$JMETER_URL:/home/ec2-user
 path_jlt="/home/ec2-user/$RESULT_PATH/testresult.jlt"
 path_visualize="$RESULT_PATH"
 host_url="$HOST_URL"
@@ -7,6 +6,7 @@ result_path="$RESULT_PATH"
 jmeter_url="$JMETER_URL"
 echo "$path_jlt"
 echo "$path_visualize"
+scp -i ~/.aws/PetclinicKeyPair.pem /Users/gokhansimsek/Desktop/sidekick-load-testing/thundra-sidekick-petclinic-demo/petclinic-app/src/test/jmeter/petclinic_test_plan.jmx ec2-user@$jmeter_url:/home/ec2-user
 if [ ! -z "$INSTALL" ]; then
 ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@$jmeter_url "bash -s" << ENDSSH
     sudo yum -y install java-1.8.0
