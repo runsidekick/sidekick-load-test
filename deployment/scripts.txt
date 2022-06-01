@@ -14,11 +14,12 @@ aws ec2 create-security-group --group-name petclinic-sg --description "Petclinic
 EC2:
 aws ec2 run-instances \
     --image-id ami-0ca285d4c2cda3300 \
-    --instance-type t2.micro \
+    --instance-type c5.4xlarge \
+    --cpu-options "CoreCount=8,ThreadsPerCore=2" \
     --key-name PetclinicKeyPair \
     --placement AvailabilityZone=us-west-2a \
     --security-groups petclinic-sg \
-    --count 3
+    --count 1
 
 MYSQL:
 aws rds create-db-instance \
@@ -120,33 +121,37 @@ Run Petclinic:
 
 
 
-jmeter => ec2-54-191-234-181.us-west-2.compute.amazonaws.com
-agentless => ec2-34-219-59-87.us-west-2.compute.amazonaws.com
-sidekick => ec2-18-236-89-219.us-west-2.compute.amazonaws.com
-lightrun => ec2-54-190-57-200.us-west-2.compute.amazonaws.com
-rookout => ec2-52-42-255-169.us-west-2.compute.amazonaws.com
+jmeter => ec2-34-211-225-156.us-west-2.compute.amazonaws.com
+agentless => ec2-34-211-161-86.us-west-2.compute.amazonaws.com
+sidekick => ec2-35-87-200-246.us-west-2.compute.amazonaws.com
+lightrun => ec2-54-214-210-98.us-west-2.compute.amazonaws.com
+rookout => ec2-34-217-33-177.us-west-2.compute.amazonaws.com
 
 jmeter.sh:
+INSTALL=1
 
-HOST_URL=ec2-34-219-59-87.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_agentless JMETER_URL=ec2-54-191-234-181.us-west-2.compute.amazonaws.com ./jmeter.sh
-HOST_URL=ec2-18-236-89-219.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_sidekick JMETER_URL=ec2-54-191-234-181.us-west-2.compute.amazonaws.com ./jmeter.sh
-HOST_URL=ec2-54-190-57-200.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_lightrun JMETER_URL=ec2-54-191-234-181.us-west-2.compute.amazonaws.com ./jmeter.sh
-HOST_URL=ec2-52-42-255-169.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_rookout JMETER_URL=ec2-54-191-234-181.us-west-2.compute.amazonaws.com ./jmeter.sh
+HOST_URL=ec2-34-211-161-86.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_agentless JMETER_URL=ec2-34-211-225-156.us-west-2.compute.amazonaws.com INSTALL=1 ./jmeter.sh
+HOST_URL=ec2-35-87-200-246.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_sidekick JMETER_URL=ec2-34-211-225-156.us-west-2.compute.amazonaws.com ./jmeter.sh
+HOST_URL=ec2-54-214-210-98.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_lightrun JMETER_URL=ec2-34-211-225-156.us-west-2.compute.amazonaws.com ./jmeter.sh
+HOST_URL=ec2-34-217-33-177.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_rookout JMETER_URL=ec2-34-211-225-156.us-west-2.compute.amazonaws.com ./jmeter.sh
 
 agent.sh:
-SEND_JAR=1
 
-AGENT=agentless ./agent-run.sh
-AGENT=sidekick ./agent-run.sh
-AGENT=lightrun ./agent-run.sh
-AGENT=rookout ./agent-run.sh
+AGENT=agentless SEND_JAR=1 ./agent-run.sh
+AGENT=sidekick SEND_JAR=1 ./agent-run.sh
+AGENT=lightrun SEND_JAR=1 ./agent-run.sh
+AGENT=rookout SEND_JAR=1 ./agent-run.sh
 
 
 ec2 instances:
-jmeter => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-54-191-234-181.us-west-2.compute.amazonaws.com
-agentless => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-34-219-59-87.us-west-2.compute.amazonaws.com
-sidekick => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-18-236-89-219.us-west-2.compute.amazonaws.com
-lightrun => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-54-190-57-200.us-west-2.compute.amazonaws.com
-rookout => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-52-42-255-169.us-west-2.compute.amazonaws.com
+jmeter => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-34-211-225-156.us-west-2.compute.amazonaws.com
+agentless => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-34-211-161-86.us-west-2.compute.amazonaws.com
+sidekick => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-35-87-200-246.us-west-2.compute.amazonaws.com
+lightrun => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-54-214-210-98.us-west-2.compute.amazonaws.com
+rookout => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-34-217-33-177.us-west-2.compute.amazonaws.com
 
 
+
+sudo bash -c 'echo 1024 65000 > /proc/sys/net/ipv4/ip_local_port_range'
+
+sudo sysctl -w net.ipv4.tcp_tw_reuse=1

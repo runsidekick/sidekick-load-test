@@ -1,7 +1,7 @@
-agentless=ec2-34-219-59-87.us-west-2.compute.amazonaws.com
-sidekick=ec2-18-236-89-219.us-west-2.compute.amazonaws.com
-lightrun=ec2-54-190-57-200.us-west-2.compute.amazonaws.com
-rookout=ec2-52-42-255-169.us-west-2.compute.amazonaws.com
+agentless=ec2-34-211-161-86.us-west-2.compute.amazonaws.com
+sidekick=ec2-35-87-200-246.us-west-2.compute.amazonaws.com
+lightrun=ec2-54-214-210-98.us-west-2.compute.amazonaws.com
+rookout=ec2-34-213-111-231.us-west-2.compute.amazonaws.com
 if [ "$AGENT" == "sidekick" ]; then
 echo "Sidekick started..."
     if [ ! -z "$SEND_JAR" ]; then

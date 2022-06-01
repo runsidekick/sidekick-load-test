@@ -30,14 +30,14 @@
       <com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroup guiclass="com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroupGui" testclass="com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroup" testname="bzm - Concurrency Thread Group" enabled="true">
         <elementProp name="ThreadGroup.main_controller" elementType="com.blazemeter.jmeter.control.VirtualUserController"/>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
-        <stringProp name="TargetLevel">8</stringProp>
-        <stringProp name="RampUp">4</stringProp>
-        <stringProp name="Steps">4</stringProp>
-        <stringProp name="Hold">4</stringProp>
+        <stringProp name="TargetLevel">${__tstFeedback(shaping-timer,1,256,10)}</stringProp>
+        <stringProp name="RampUp">8</stringProp>
+        <stringProp name="Steps">16</stringProp>
+        <stringProp name="Hold">8</stringProp>
         <stringProp name="LogFilename"></stringProp>
         <stringProp name="Iterations"></stringProp>
-        <stringProp name="Unit">S</stringProp>
-        <stringProp name="TestPlan.comments">8-4-4-4</stringProp>
+        <stringProp name="Unit">M</stringProp>
+        <stringProp name="TestPlan.comments">8-4-8-8</stringProp>
       </com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroup>
       <hashTree>
         <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="Default HTTP parameters" enabled="true">
@@ -318,6 +318,46 @@
           </objProp>
           <stringProp name="filename"></stringProp>
         </ResultCollector>
+        <hashTree/>
+        <kg.apc.jmeter.timers.VariableThroughputTimer guiclass="kg.apc.jmeter.timers.VariableThroughputTimerGui" testclass="kg.apc.jmeter.timers.VariableThroughputTimer" testname="shaping-timer" enabled="true">
+          <collectionProp name="load_profile">
+            <collectionProp name="-596082030">
+              <stringProp name="49">1</stringProp>
+              <stringProp name="1000">1000</stringProp>
+              <stringProp name="48625">100</stringProp>
+            </collectionProp>
+            <collectionProp name="-286534375">
+              <stringProp name="1507423">1000</stringProp>
+              <stringProp name="1000">1000</stringProp>
+              <stringProp name="48625">100</stringProp>
+            </collectionProp>
+            <collectionProp name="1375178274">
+              <stringProp name="1512228">1500</stringProp>
+              <stringProp name="1512228">1500</stringProp>
+              <stringProp name="48625">100</stringProp>
+            </collectionProp>
+            <collectionProp name="1333234681">
+              <stringProp name="1567005">3000</stringProp>
+              <stringProp name="1537214">2000</stringProp>
+              <stringProp name="48780">150</stringProp>
+            </collectionProp>
+            <collectionProp name="-539268219">
+              <stringProp name="1626587">5000</stringProp>
+              <stringProp name="1567005">3000</stringProp>
+              <stringProp name="1567">10</stringProp>
+            </collectionProp>
+            <collectionProp name="1865586802">
+              <stringProp name="1537214">2000</stringProp>
+              <stringProp name="1512228">1500</stringProp>
+              <stringProp name="1815">90</stringProp>
+            </collectionProp>
+            <collectionProp name="-2137051393">
+              <stringProp name="1512228">1500</stringProp>
+              <stringProp name="48">0</stringProp>
+              <stringProp name="1722">60</stringProp>
+            </collectionProp>
+          </collectionProp>
+        </kg.apc.jmeter.timers.VariableThroughputTimer>
         <hashTree/>
       </hashTree>
     </hashTree>
