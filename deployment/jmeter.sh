@@ -31,6 +31,8 @@ ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@$jmeter_url "bash -s" << ENDSSH
 ENDSSH
 else
 ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@$jmeter_url "bash -s" << ENDSSH
+    sudo bash -c 'echo 1024 65000 > /proc/sys/net/ipv4/ip_local_port_range'
+    sudo sysctl -w net.ipv4.tcp_tw_reuse=1
     ./apache-jmeter-5.4.3/bin/jmeter.sh -n -t petclinic_test_plan.jmx -Jhost=$host_url -Jport=8080 -l $path_jlt -e -o $path_visualize
     zip -r $result_path.zip $path_visualize
     exit;
