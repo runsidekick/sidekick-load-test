@@ -130,25 +130,26 @@ rookout => ec2-34-217-33-177.us-west-2.compute.amazonaws.com
 jmeter.sh:
 INSTALL=1
 
-HOST_URL=ec2-34-211-161-86.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_agentless JMETER_URL=ec2-34-211-225-156.us-west-2.compute.amazonaws.com INSTALL=1 ./jmeter.sh
-HOST_URL=ec2-35-87-200-246.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_sidekick JMETER_URL=ec2-34-211-225-156.us-west-2.compute.amazonaws.com ./jmeter.sh
-HOST_URL=ec2-54-214-210-98.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_lightrun JMETER_URL=ec2-34-211-225-156.us-west-2.compute.amazonaws.com ./jmeter.sh
-HOST_URL=ec2-34-217-33-177.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_rookout JMETER_URL=ec2-34-211-225-156.us-west-2.compute.amazonaws.com ./jmeter.sh
+HOST_URL=ec2-35-85-45-221.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_agentless JMETER_URL=ec2-34-217-46-61.us-west-2.compute.amazonaws.com ./jmeter.sh
+HOST_URL=ec2-35-88-156-197.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_sidekick_wth_tps JMETER_URL=ec2-34-217-46-61.us-west-2.compute.amazonaws.com ./jmeter.sh
+HOST_URL=ec2-52-41-162-123.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_lightrun_wth_tps JMETER_URL=ec2-35-87-82-3.us-west-2.compute.amazonaws.com ./jmeter.sh
+HOST_URL=ec2-54-189-145-80.us-west-2.compute.amazonaws.com RESULT_PATH=visualize_rookout_wth_tps JMETER_URL=ec2-34-217-46-61.us-west-2.compute.amazonaws.com ./jmeter.sh
 
 agent.sh:
+SEND_JAR=1
 
-AGENT=agentless SEND_JAR=1 ./agent-run.sh
-AGENT=sidekick SEND_JAR=1 ./agent-run.sh
-AGENT=lightrun SEND_JAR=1 ./agent-run.sh
-AGENT=rookout SEND_JAR=1 ./agent-run.sh
+AGENT=agentless ./agent-run.sh
+AGENT=sidekick ./agent-run.sh
+AGENT=lightrun ./agent-run.sh
+AGENT=rookout ./agent-run.sh
 
 
 ec2 instances:
-jmeter => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-34-211-225-156.us-west-2.compute.amazonaws.com
-agentless => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-34-211-161-86.us-west-2.compute.amazonaws.com
-sidekick => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-35-87-200-246.us-west-2.compute.amazonaws.com
-lightrun => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-54-214-210-98.us-west-2.compute.amazonaws.com
-rookout => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-34-217-33-177.us-west-2.compute.amazonaws.com
+jmeter => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-35-87-82-3.us-west-2.compute.amazonaws.com
+agentless => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-35-85-45-221.us-west-2.compute.amazonaws.com
+sidekick => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-35-88-156-197.us-west-2.compute.amazonaws.com
+lightrun => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-52-41-162-123.us-west-2.compute.amazonaws.com
+rookout => ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@ec2-54-189-145-80.us-west-2.compute.amazonaws.com
 
 
 

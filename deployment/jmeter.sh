@@ -10,8 +10,10 @@ scp -i ~/.aws/PetclinicKeyPair.pem /Users/gokhansimsek/Desktop/sidekick-load-tes
 if [ ! -z "$INSTALL" ]; then
 ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@$jmeter_url "bash -s" << ENDSSH
     sudo yum -y install java-1.8.0
-    wget -c http://ftp.ps.pl/pub/apache//jmeter/binaries/apache-jmeter-5.4.3.tgz
-    tar -xf apache-jmeter-5.4.3.tgz
+    sudo bash -c 'echo 1024 65000 > /proc/sys/net/ipv4/ip_local_port_range'
+    sudo sysctl -w net.ipv4.tcp_tw_reuse=1
+    wget -c https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.4.3.zip
+    unzip apache-jmeter-5.4.3.zip
     wget -c https://jmeter-plugins.org/files/packages/jpgc-casutg-2.10.zip
     sudo yum -y install unzip
     unzip jpgc-casutg-2.10.zip
