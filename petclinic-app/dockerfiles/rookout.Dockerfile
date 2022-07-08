@@ -13,5 +13,5 @@ COPY --from=BUILD /usr/src/app/petclinic-app/target/petclinic-app-1.0.0.jar /app
 WORKDIR /app
 EXPOSE 8080
 RUN curl -L "https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.rookout&a=rook&v=LATEST" -o rook.jar
-ENV JAVA_TOOL_OPTIONS="-javaagent:./rook.jar -DROOKOUT_TOKEN=48030070e9910fc49821ce11d8f2bdc54e4ef1688618666d514eb3920a2de07a -DROOKOUT_LABELS=env:dev"
+ENV JAVA_TOOL_OPTIONS="-javaagent:./rook.jar -DROOKOUT_TOKEN=<rook_out_token> -DROOKOUT_LABELS=env:dev"
 ENTRYPOINT [ "java", "-Dspring.profiles.active=rookout","-verbose:gc", "-Xloggc:/app/log/gc.log", "-XX:+PrintGCTimeStamps", "-XX:+PrintGCDateStamps",  "-jar", "petclinic-app.jar" ]

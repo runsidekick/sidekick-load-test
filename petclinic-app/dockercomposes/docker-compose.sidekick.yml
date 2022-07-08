@@ -31,7 +31,7 @@ services:
       MYSQL_URL: jdbc:mysql://mysql:3306/petclinic-sidekick
       MYSQL_USER: petclinic-sidekick
       MYSQL_PASS: petclinic-sidekick
-      sidekick_apiKey: 3637c782-38c3-49a0-9722-def85f76d847
+      sidekick_apiKey: <sidekick_api_key>
       sidekick_agent_application_name: petclinic-sidekick-app
       sidekick_agent_application_version: 0.1.1
       sidekick_agent_application_stage: local
