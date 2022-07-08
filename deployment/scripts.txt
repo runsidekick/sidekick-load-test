@@ -86,7 +86,7 @@ Run Petclinic:
         export MYSQL_USER=petclinic
         export MYSQL_PASSWORD=petclinic
         export MYSQL_URL=jdbc:mysql://petclinic-mysql-instance.cmzl2ojch8c1.us-west-2.rds.amazonaws.com/PetClinicAppRds
-        export sidekick_apiKey: 3637c782-38c3-49a0-9722-def85f76d847
+        export sidekick_apiKey: <your_sidekick_api_key>
         export sidekick_agent_application_name: petclinic-sidekick-app
         export sidekick_agent_application_version: 0.1.1
         export sidekick_agent_application_stage: local
@@ -100,7 +100,7 @@ Run Petclinic:
         export MYSQL_PASSWORD=petclinic
         export MYSQL_URL=jdbc:mysql://petclinic-mysql-instance.cmzl2ojch8c1.us-west-2.rds.amazonaws.com/PetClinicAppRds
         curl -L "https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.rookout&a=rook&v=LATEST" -o rook.jar
-        export JAVA_TOOL_OPTIONS="-javaagent:./rook.jar -DROOKOUT_TOKEN=48030070e9910fc49821ce11d8f2bdc54e4ef1688618666d514eb3920a2de07a -DROOKOUT_LABELS=env:dev"
+        export JAVA_TOOL_OPTIONS="-javaagent:./rook.jar -DROOKOUT_TOKEN=<rookout_token> -DROOKOUT_LABELS=env:dev"
         java -Dspring.profiles.active=rookout -verbose:gc -Xloggc:./gc.log -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -jar petclinic-app-1.0.0.jar
 
     Lightrun:
@@ -108,7 +108,7 @@ Run Petclinic:
         export MYSQL_USER=petclinic
         export MYSQL_PASSWORD=petclinic
         export MYSQL_URL=jdbc:mysql://petclinic-mysql-instance.cmzl2ojch8c1.us-west-2.rds.amazonaws.com/PetClinicAppRds
-        export LIGHTRUN_KEY=6f8e9878-fe56-4f19-acd1-44e9d5b298d9
+        export LIGHTRUN_KEY=<lightrun_key>
         bash -c "$(curl -L "https://app.lightrun.com/download/company/d067f4eb-3bb0-4fe4-9bd7-900bc0e996ef/install-agent.sh?platform=openjdk:8")"
         java -agentpath:./agent/lightrun_agent.so -Dspring.profiles.active=lightrun -verbose:gc -Xloggc:./gc.log -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -jar petclinic-app-1.0.0.jar
 
