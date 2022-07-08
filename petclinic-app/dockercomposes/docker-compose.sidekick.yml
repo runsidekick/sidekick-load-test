@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0.24
+    container_name: mysql-petclinic
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_USER=petclinic-sidekick
+      - MYSQL_PASSWORD=petclinic-sidekick
+      - MYSQL_DATABASE=petclinic-sidekick
+    cap_add:
+      - SYS_NICE
+  petclinic-app:
+    build:
+      context: ../..
+      dockerfile: ./petclinic-app/dockerfiles/sidekick.Dockerfile
+    container_name: petclinic-sidekick-app
+    deploy:
+      resources:
+        limits:
+          cpus: 4
+          memory: 1024M
+    depends_on:
+      - "mysql"
+    environment:
+      MYSQL_URL: jdbc:mysql://mysql:3306/petclinic-sidekick
+      MYSQL_USER: petclinic-sidekick
+      MYSQL_PASS: petclinic-sidekick
+      sidekick_apiKey: <sidekick_api_key>
+      sidekick_agent_application_name: petclinic-sidekick-app
+      sidekick_agent_application_version: 0.1.1
+      sidekick_agent_application_stage: local
+    ports:
+      - 8080:8080
+    restart: always
+    volumes:
+      - ./logs/sidekick:/app/log
