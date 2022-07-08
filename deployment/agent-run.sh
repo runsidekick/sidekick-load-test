@@ -32,7 +32,7 @@ ssh -i ~/.aws/PetclinicKeyPair.pem ec2-user@$lightrun 'bash -s' <<'ENDSSH'
     export MYSQL_PASS=petclinic
     export MYSQL_URL=jdbc:mysql://petclinic-mysql-instance.cmzl2ojch8c1.us-west-2.rds.amazonaws.com/PetClinicAppRds
     export LIGHTRUN_KEY=<lightrun_key>
-    bash -c "$(curl -L "https://app.lightrun.com/download/company/d067f4eb-3bb0-4fe4-9bd7-900bc0e996ef/install-agent.sh?platform=openjdk:8")"
+    bash -c "$(curl -L "https://app.lightrun.com/download/company/<lightrun_company_id>/install-agent.sh?platform=openjdk:8")"
     java -agentpath:./agent/lightrun_agent.so -Dspring.profiles.active=lightrun -verbose:gc -Xloggc:./gc.log -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -jar petclinic-app-1.0.0.jar
 ENDSSH
 elif [ "$AGENT" == "rookout" ]; then
